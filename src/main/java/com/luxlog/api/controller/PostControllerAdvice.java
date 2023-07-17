@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.util.HashMap;
+
 @ControllerAdvice
 public class PostControllerAdvice {
 
@@ -22,6 +24,7 @@ public class PostControllerAdvice {
         ErrorResponse response = ErrorResponse.builder()
                 .code("400")
                 .errorMessage("잘못된 요청이오")
+                .validation(new HashMap<>())
                 .build();
 
         FieldError fieldError = e.getFieldError();

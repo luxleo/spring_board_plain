@@ -37,31 +37,6 @@ class PostControllerTest {
     ObjectMapper objectMapper;
 
     @Test
-    @DisplayName("/posts로 글 날리면 Hello World 응답")
-    void test() throws Exception {
-        //given
-        //PostCreate request = new PostCreate("제목이오", "내용이오");
-
-        // builder pattern적용
-        PostCreate request = PostCreate.builder()
-                .title("제목입니다")
-                .content("내용입니다")
-                .build();
-        // json으로 파싱 -> 기본 생성자 없으면 작동안한다.
-        String json = objectMapper.writeValueAsString(request);
-
-        System.out.println("json = " + json);
-
-        mockMvc.perform(post("/posts")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json)
-                )
-                .andExpect(status().isOk())
-                .andExpect(content().string("Hello World"))
-                .andDo(print());
-    }
-
-    @Test
     @DisplayName("/posts 시 title은 비어있으면 에러를 던진다.")
     void validationTest() throws Exception {
         //given
@@ -78,7 +53,7 @@ class PostControllerTest {
                 )
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("400"))
-                .andExpect(jsonPath("$.errorMessage").value("잘못된 요청입니다"))
+                .andExpect(jsonPath("$.errorMessage").value("잘못된 요청이오"))
                 .andExpect(jsonPath("$.validation.title").value("제목은 비어있을수 없소"))
                 .andDo(print());
 
@@ -190,7 +165,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("없는 게시글 수정 및 삭제")
+    @DisplayName("없는 게시글 수정 및 삭제시 404응답")
     void noSuchPost() throws Exception {
         //given
         PostEdit postEdit = PostEdit.builder()

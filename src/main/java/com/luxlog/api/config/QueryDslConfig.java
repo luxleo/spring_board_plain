@@ -1,24 +1,21 @@
 package com.luxlog.api.config;
 
-import com.luxlog.api.repository.PostRepository;
-import com.luxlog.api.repository.PostRepositoryCustom;
-import com.luxlog.api.repository.PostRepositoryImpl;
-import com.luxlog.api.service.PostService;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
-//@Configuration
+@Configuration
 @RequiredArgsConstructor
 public class QueryDslConfig {
-    private final EntityManager em;
+    @PersistenceContext
+    public EntityManager em;
 
-    //@Bean
-    public PostService postService() {
-        return new PostService((PostRepository) postRepository());
-    }
-    //@Bean
-    public PostRepositoryCustom postRepository() {
-        return new PostRepositoryImpl(em);
+    @Bean
+    public JPAQueryFactory query() {
+        return new JPAQueryFactory(em);
     }
 }
