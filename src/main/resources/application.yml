@@ -13,3 +13,11 @@ spring:
       pageable:
         default-page-size: 5
         one-indexed-parameters: true
+  #embede 설정(자동으로 유저 데이터 넣기
+  sql:
+    init:
+      mode: always
+  jpa:
+    defer-datasource-initialization: true # .sql 파일이 hibernate초기화 이후 동작 하도록
+    hibernate:
+      ddl-auto: create-drop

@@ -119,3 +119,6 @@
             return userSession;
         }
     }
+## 18. 메모리 디비-data.sql
+    resources/import.sql로 사용할 임시 데이터
+    생성가능하다. 

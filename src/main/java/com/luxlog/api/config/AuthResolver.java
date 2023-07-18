@@ -1,7 +1,10 @@
 package com.luxlog.api.config;
 
 import com.luxlog.api.config.data.UserSession;
+import com.luxlog.api.domain.Session;
 import com.luxlog.api.exception.UnauthorizedException;
+import com.luxlog.api.repository.SessionRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -10,7 +13,9 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 @Slf4j
+@RequiredArgsConstructor
 public class AuthResolver implements HandlerMethodArgumentResolver {
+    private final SessionRepository sessionRepository;
     /**
      * parameter로 넘어온 값이 실제 사용하려는 DTO클래스와 형식이 일치하는지 확인
      */
@@ -24,10 +29,13 @@ public class AuthResolver implements HandlerMethodArgumentResolver {
      */
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        String userName = webRequest.getHeader("Authorization");
-        if (userName == null || userName.equals("")) {
+        String accessToken = webRequest.getHeader("Authorization");
+        if (accessToken == null || accessToken.equals("")) {
             throw new UnauthorizedException();
         }
-        return new UserSession(userName);
+        Session session = sessionRepository.findByAccessToken(accessToken)
+                .orElseThrow(UnauthorizedException::new);
+        return new UserSession(session.getUser().getId());
     }
+
 }

@@ -5,12 +5,9 @@ import lombok.Setter;
 
 @Getter @Setter
 public class UserSession {
-    private static Long sequence = 1L;
-    private String name;
-    private Long id;
+    private final Long id;
 
-    public UserSession(String name) {
-        this.name = name;
-        id = sequence++;
+    public UserSession(Long id) {
+        this.id = id;
     }
 }
