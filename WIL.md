@@ -122,3 +122,12 @@
 ## 18. 메모리 디비-data.sql
     resources/import.sql로 사용할 임시 데이터
     생성가능하다. 
+## cookie-session 방식 인증
+    쿠키의 각종 설정값(same-site, httpOnly)등 이해하기
+    쿠키에 실을 세션 accesstoken값 UUID로 구현
+## jwt 방식 인증
+    1.Base64: byte->str, str->byte로
+    2.jwt 암호화 방식: singing key로 암호화할 대상(subject) 바디에 실어 전달
+        2-1HSA256(bit) -> 32byte
+        2-2HSA512(bit) -> 64byte
+    

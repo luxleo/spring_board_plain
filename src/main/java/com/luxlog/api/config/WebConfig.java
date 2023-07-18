@@ -1,5 +1,6 @@
 package com.luxlog.api.config;
 
+import com.luxlog.api.config.resolver.AuthResolver;
 import com.luxlog.api.repository.SessionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +20,9 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        //resolvers.add(new AuthResolver(sessionRepository)); session-cookie방식
         resolvers.add(new AuthResolver(sessionRepository));
+        //resolvers.add(new AuthResolverJwt());
     }
     //    @Override
 //    public void addCorsMappings(CorsRegistry registry) {

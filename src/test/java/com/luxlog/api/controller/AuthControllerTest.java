@@ -66,7 +66,7 @@ class AuthControllerTest {
         Assertions.assertEquals(1, repository.count());
 
         //expect 로그인 성공시
-        mockMvc.perform(post("/auth/login")
+        mockMvc.perform(post("/auth/login/cookie_session")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
                 )
@@ -98,6 +98,7 @@ class AuthControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
     }
+
     @Test
     @DisplayName("로그인 후 유효하지 않은 세션 토큰 값으로 인증이 필요한 페이지에 접속불가하다.")
     void invalidAccessTokenRequirePage() throws Exception {

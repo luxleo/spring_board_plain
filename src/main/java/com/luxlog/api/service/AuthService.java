@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
     private final UserRepository repository;
     @Transactional
-    public String signIn(Login request) {
+    public String signInSession(Login request) {
         User user = repository.findByEmailAndPassword(request.getEmail(), request.getPassword())
                 .orElseThrow(InvallidSigningException::new);
         Session session = Session.builder()
@@ -22,5 +22,11 @@ public class AuthService {
                 .build();
         user.addSession(session);
         return session.getAccessToken();
+    }
+    @Transactional
+    public Long signIn(Login request) {
+        User user = repository.findByEmailAndPassword(request.getEmail(), request.getPassword())
+                .orElseThrow(InvallidSigningException::new);
+        return user.getId();
     }
 }

@@ -1,7 +1,28 @@
-POST http://localhost:8080/auth/login
+### 로그인 cookie-session
+POST http://localhost:8080/auth/login/cookie_session
 Content-Type: application/json
 
 {
   "email": "test1@gmail.com",
   "password": "1234"
 }
+
+### 인증 페이지 요청 cookie-sessioin
+GET http://localhost:8080/foo
+Content-Type: application/json
+Cookie: SESSION=aaf8b7c2-f074-40d4-9674-ff856718cc19
+
+### 로그인 jwt
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+"email": "test1@gmail.com",
+"password": "1234"
+}
+
+
+### 인증 페이지 요청 jwt
+GET http://localhost:8080/foo
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIn0.3NP5KezO-TYGAsTJFri9cVgZT-6G1a3n0JARiCxUNEo

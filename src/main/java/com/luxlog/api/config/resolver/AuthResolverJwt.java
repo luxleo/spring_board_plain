@@ -1,9 +1,11 @@
-package com.luxlog.api.config;
+package com.luxlog.api.config.resolver;
 
 import com.luxlog.api.config.data.UserSession;
-import com.luxlog.api.domain.Session;
 import com.luxlog.api.exception.UnauthorizedException;
-import com.luxlog.api.repository.SessionRepository;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -12,10 +14,12 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import java.util.Base64;
+
 @Slf4j
 @RequiredArgsConstructor
-public class AuthResolver implements HandlerMethodArgumentResolver {
-    private final SessionRepository sessionRepository;
+public class AuthResolverJwt implements HandlerMethodArgumentResolver {
+    private final static String JWT_PRIVATE_KEY = "cd7+/e8dlsaOiRldLN5KCqrojWXKXnBr4KeFDq9ab/s=";
     /**
      * parameter로 넘어온 값이 실제 사용하려는 DTO클래스와 형식이 일치하는지 확인
      */
@@ -29,13 +33,24 @@ public class AuthResolver implements HandlerMethodArgumentResolver {
      */
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        String accessToken = webRequest.getHeader("Authorization");
-        if (accessToken == null || accessToken.equals("")) {
+        String jws = webRequest.getHeader("Authorization");
+
+        if (jws == null || jws.equals("")) {
             throw new UnauthorizedException();
         }
-        Session session = sessionRepository.findByAccessToken(accessToken)
-                .orElseThrow(UnauthorizedException::new);
-        return new UserSession(session.getUser().getId());
+        byte[] decodeByteKey = Base64.getDecoder().decode(JWT_PRIVATE_KEY);
+        try {
+            Jws<Claims> claim = Jwts.parserBuilder()
+                    .setSigningKey(decodeByteKey)
+                    .build()
+                    .parseClaimsJws(jws);
+            log.info(">>>> claim:{}",claim);
+            String userId = claim.getBody().getSubject();
+            return new UserSession(Long.parseLong(userId));
+        } catch (JwtException e) {
+
+            throw new UnauthorizedException();
+        }
     }
 
 }
