@@ -1,6 +1,8 @@
 package com.luxlog.api.controller;
 
+import com.luxlog.api.config.AppConfig;
 import com.luxlog.api.request.Login;
+import com.luxlog.api.request.SignUp;
 import com.luxlog.api.response.SessionResponse;
 import com.luxlog.api.service.AuthService;
 import io.jsonwebtoken.Jwts;
@@ -16,14 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.crypto.SecretKey;
 import java.time.Duration;
-import java.util.Base64;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService service;
-    private final static String JWT_PRIVATE_KEY = "cd7+/e8dlsaOiRldLN5KCqrojWXKXnBr4KeFDq9ab/s=";
+    private final AppConfig appConfig;
+
     /**
      * 로그인 성공 시 accessToken반환 해준다 session-cookie로그인
      */
@@ -60,8 +62,8 @@ public class AuthController {
 //        byte[] encodedKey = key.getEncoded();
 //        String strKey = Base64.getEncoder().encodeToString(encodedKey);
 
-        byte[] decoded = Base64.getDecoder().decode(JWT_PRIVATE_KEY);
-        SecretKey key = Keys.hmacShaKeyFor(decoded);
+//        byte[] decoded = Base64.getDecoder().decode(JWT_PRIVATE_KEY);
+        SecretKey key = Keys.hmacShaKeyFor(appConfig.getJwtKey());
         String jws = Jwts.builder()
                 .setSubject(String.valueOf(userId))
                 .signWith(key)
@@ -70,4 +72,8 @@ public class AuthController {
         return new SessionResponse(jws);
     }
 
+    @PostMapping("/auth/sign-up")
+    public void signUp(@RequestBody SignUp signUp) {
+        service.signUp(signUp);
+    }
 }

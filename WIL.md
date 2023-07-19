@@ -130,4 +130,19 @@
     2.jwt 암호화 방식: singing key로 암호화할 대상(subject) 바디에 실어 전달
         2-1HSA256(bit) -> 32byte
         2-2HSA512(bit) -> 64byte
-    
+## 비밀 번호 암호화
+    1.해시의 방식을 설명하세요
+        SHA1, SHA256, MD5 -> 왜 이런 알고리즘으로 하면 안되는지
+    2. 왜 Bcrypt,Scrypt,Argon2를 왜 사용해야하는지
+    3. 1에 대한 응답은: salt이다. 해시는 인풋이 같으면 아웃풋이 같으므ㅇ
+## @Profile, @ActiveProfile
+    1.테스트와 운영환경의 프로필에 따른 설정 가능케 한다-> passwordEncoder에서 사용
+##  다형성
+    1. PasswordEncoder와 같이 인터페이스의 구현체를 상황별로 달리둔다.
+        예) ScryptPasswordEncoder = default
+            PlainPasswordEncdoer = test 이런식으로 말이다.
+# 단축키
+```text
+1. class에서 annotation으로 메서드생성시에 cmd+7하면
+    자동으로 생성된 메서드들 참조가능하다.
+```
