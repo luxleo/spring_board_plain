@@ -125,6 +125,10 @@
 ## cookie-session 방식 인증
     쿠키의 각종 설정값(same-site, httpOnly)등 이해하기
     쿠키에 실을 세션 accesstoken값 UUID로 구현
+## @ConfigurationProperties(prefix= "[PREFIX_NAME]" )
+    application.yml에 지정한 prefix로 커스텀 config를 지정하자
+    예로 jwt 프리이빗키를 프로젝트 내 상수로 정의하지 않는다.
+    대신 이 성질을 이용하여 보관한다.
 ## jwt 방식 인증
     1.Base64: byte->str, str->byte로
     2.jwt 암호화 방식: singing key로 암호화할 대상(subject) 바디에 실어 전달
